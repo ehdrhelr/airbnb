@@ -23,12 +23,12 @@ public class AccommodationController {
         this.accommodationService = accommodationService;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public ApiResult<List<Accommodation>> accommodations() {
         return ApiResult.succeed(accommodationService.accommodations());
     }
 
-    @GetMapping("/search")
+    @GetMapping
     public ApiResult<List<AccommodationResponseDto>> accommodationsBySearch(
             @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam LocalDate checkIn
             , @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam LocalDate checkOut
