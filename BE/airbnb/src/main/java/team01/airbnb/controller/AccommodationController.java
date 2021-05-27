@@ -1,16 +1,15 @@
 package team01.airbnb.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
 import team01.airbnb.domain.accommodation.Accommodation;
 import team01.airbnb.dto.ApiResult;
 import team01.airbnb.dto.request.TotalAccommodationSaveRequestDto;
 import team01.airbnb.dto.response.AccommodationResponseDto;
 import team01.airbnb.service.AccommodationService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -29,11 +28,17 @@ public class AccommodationController {
         return ApiResult.succeed(accommodationService.accommodations());
     }
 
-    // todo : 조건에 따른 param 추가 예정
     @GetMapping("/search")
-    public ApiResult<List<AccommodationResponseDto>> availableAccommodationsForReservation() {
-        return ApiResult.succeed(accommodationService.findAvailableAccommodationsForReservation());
+    public ApiResult<List<AccommodationResponseDto>> accommodationsBySearch(
+            @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam LocalDate checkIn
+            , @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam LocalDate checkOut
+            , @RequestParam int minCharge
+            , @RequestParam int maxCharge
+            , @RequestParam int guests) {
+        return ApiResult.succeed(accommodationService.findAvailableAccommodationsForReservation(
+                checkIn, checkOut, minCharge, maxCharge, guests));
     }
+
 
     @PostMapping("/")
     public ApiResult createAccommodation(TotalAccommodationSaveRequestDto totalAccommodationSaveRequestDto) {

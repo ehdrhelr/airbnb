@@ -10,6 +10,7 @@ import team01.airbnb.dto.request.TotalAccommodationSaveRequestDto;
 import team01.airbnb.dto.response.AccommodationResponseDto;
 import team01.airbnb.repository.AccommodationRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -25,8 +26,10 @@ public class AccommodationService {
         return accommodationRepository.findAllAccommodations();
     }
 
-    public List<AccommodationResponseDto> findAvailableAccommodationsForReservation() {
-        return accommodationRepository.findAvailableAccommodationsForReservation();
+    public List<AccommodationResponseDto> findAvailableAccommodationsForReservation(
+            LocalDate checkIn, LocalDate checkOut, int minCharge, int maxCharge, int guests) {
+        return accommodationRepository.findAvailableAccommodationsForReservation(
+                checkIn, checkOut, minCharge, maxCharge, guests);
     }
 
     @Transactional

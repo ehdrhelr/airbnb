@@ -19,6 +19,7 @@ import team01.airbnb.dto.Charge;
 import team01.airbnb.dto.response.AccommodationResponseDto;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -193,7 +194,8 @@ public class AccommodationRepository {
          return result.length == amenityIds.size();
     }
 
-    public List<AccommodationResponseDto> findAvailableAccommodationsForReservation() {
+    public List<AccommodationResponseDto> findAvailableAccommodationsForReservation(
+            LocalDate checkIn, LocalDate checkOut, int minCharge, int maxCharge, int guests) {
         String query = "SELECT DISTINCT a.id, a.`name`, a.charge_per_night, p.`name` photo, c.guests" +
                 ", c.bedroom_count, c.bed_count, c.bathroom_count, " +
                 "(" +
@@ -208,9 +210,24 @@ public class AccommodationRepository {
                 "FROM accommodation a " +
                 "JOIN accommodation_photo p " +
                 "JOIN accommodation_condition c " +
-                "on (a.id = p.accommodation_id) AND (a.id = c.accommodation_id)";
+                "on (a.id = p.accommodation_id) AND (a.id = c.accommodation_id) " +
+                "WHERE a.id NOT IN (" +
+                "   SELECT r.accommodation_id " +
+                "   FROM reservation r" +
+                "   WHERE (r.check_in <= :check_in AND r.check_out > :check_in) " +
+                "       OR (r.check_in < :check_out AND r.check_out >= :check_out) " +
+                "       OR (:check_in <= r.check_in AND :check_out > r.check_in) " +
+                "   ) AND (:min_charge <= a.charge_per_night AND a.charge_per_night <= :max_charge) " +
+                "   AND a.id IN (SELECT c.accommodation_id FROM accommodation_condition c WHERE c.guests >= :guests)";
+        SqlParameterSource namedParameters = new MapSqlParameterSource()
+                .addValue("check_in", checkIn)
+                .addValue("check_out", checkOut)
+                .addValue("min_charge", minCharge)
+                .addValue("max_charge", maxCharge)
+                .addValue("guests", guests);
         return namedParameterJdbcTemplate.query(
                 query,
+                namedParameters,
                 ACCOMMODATION_RESPONSE_DTO_ROW_MAPPER);
     }
 
