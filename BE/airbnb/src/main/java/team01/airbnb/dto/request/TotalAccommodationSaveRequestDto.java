@@ -81,11 +81,11 @@ public class TotalAccommodationSaveRequestDto {
     }
 
     public LocalTime getCheckIn() {
-        return LocalTime.parse(accommodationSaveRequestDto.getCheckIn());
+        return accommodationSaveRequestDto.getCheckIn();
     }
 
     public LocalTime getCheckOut() {
-        return LocalTime.parse(accommodationSaveRequestDto.getCheckOut());
+        return accommodationSaveRequestDto.getCheckOut();
     }
 
     public int getGuests() {

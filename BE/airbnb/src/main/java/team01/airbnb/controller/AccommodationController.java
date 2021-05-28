@@ -23,18 +23,20 @@ public class AccommodationController {
         this.accommodationService = accommodationService;
     }
 
+    // todo : list 감쌀 것
     @GetMapping("/")
     public ApiResult<List<Accommodation>> accommodations() {
         return ApiResult.succeed(accommodationService.accommodations());
     }
 
+    // todo : list 감쌀 것
     @GetMapping
     public ApiResult<List<AccommodationResponseDto>> accommodationsBySearch(
-            @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam LocalDate checkIn
-            , @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam LocalDate checkOut
-            , @RequestParam int minCharge
-            , @RequestParam int maxCharge
-            , @RequestParam int guests) {
+            @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam("check_in") LocalDate checkIn
+            , @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam("check_out") LocalDate checkOut
+            , @RequestParam("min_charge") int minCharge
+            , @RequestParam("max_charge") int maxCharge
+            , @RequestParam("guests") int guests) {
         return ApiResult.succeed(accommodationService.findAvailableAccommodationsForReservation(
                 checkIn, checkOut, minCharge, maxCharge, guests));
     }
