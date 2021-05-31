@@ -16,6 +16,7 @@ import team01.airbnb.domain.accommodation.AccommodationAddress;
 import team01.airbnb.domain.accommodation.AccommodationCondition;
 import team01.airbnb.domain.accommodation.AccommodationPhoto;
 import team01.airbnb.dto.Charge;
+import team01.airbnb.dto.response.AccommodationAddressResponseDto;
 import team01.airbnb.dto.response.AccommodationResponseDto;
 import team01.airbnb.dto.response.ChargesResponseDto;
 
@@ -34,6 +35,12 @@ public class AccommodationRepository {
                             .name(rs.getString("name"))
                             .chargePerNight(Charge.wons(rs.getInt("charge_per_night")))
                             .photo(rs.getString("photo"))
+                            .address(AccommodationAddressResponseDto.builder()
+                                    .city(rs.getString("city"))
+                                    .address(rs.getString("address"))
+                                    .latitude(rs.getDouble("latitude"))
+                                    .longitude(rs.getDouble("longitude"))
+                                    .build())
                             .condition(AccommodationCondition.builder()
                                     .guests(rs.getInt("guests"))
                                     .bedroomCount(rs.getInt("bedroom_count"))
@@ -197,8 +204,9 @@ public class AccommodationRepository {
 
     public List<AccommodationResponseDto> findAvailableAccommodationsForReservation(
             LocalDate checkIn, LocalDate checkOut, int minCharge, int maxCharge, int guests) {
-        String query = "SELECT DISTINCT a.id, a.`name`, a.charge_per_night, p.`name` photo, c.guests" +
-                ", c.bedroom_count, c.bed_count, c.bathroom_count, " +
+        String query = "SELECT DISTINCT a.id, a.`name`, a.charge_per_night, p.`name` photo, " +
+                "(SELECT `name` FROM cities WHERE id = ad.city_id) city , ad.address, ad.latitude, ad.longitude, " +
+                "c.guests, c.bedroom_count, c.bed_count, c.bathroom_count, " +
                 "(" +
                 "   SELECT GROUP_CONCAT(m.`name`) " +
                 "   FROM amenity m " +
@@ -211,7 +219,8 @@ public class AccommodationRepository {
                 "FROM accommodation a " +
                 "JOIN accommodation_photo p " +
                 "JOIN accommodation_condition c " +
-                "on (a.id = p.accommodation_id) AND (a.id = c.accommodation_id) " +
+                "JOIN accommodation_address ad " +
+                "on (a.id = p.accommodation_id) AND (a.id = c.accommodation_id) AND (a.id = ad.accommodation_id) " +
                 "WHERE a.id NOT IN (" +
                 "   SELECT r.accommodation_id " +
                 "   FROM reservation r" +

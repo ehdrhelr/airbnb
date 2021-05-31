@@ -22,8 +22,8 @@ INSERT INTO cities (country_id, `name`) VALUE (1, '서울');
 INSERT INTO accommodation (host_id, `name`, description, charge_per_night, cleaning_charge, check_in, check_out)
 VALUES (2, 'Spacious and Comfortable cozy house #4', '강남역 5번 출구에서 도보로 이동 가능합니다.', 50000, 5000, '16:00:00', '12:00:00');
 
-INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address)
-VALUE (1, 1, 1, '서초구');
+INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address, latitude, longitude)
+VALUE (1, 1, 1, '서초구', 37.496697, 127.027723);
 
 INSERT INTO accommodation_condition (accommodation_id, guests, bedroom_count, bed_count, bathroom_count)
 VALUE (1, 3, 1, 1, 1);
@@ -39,8 +39,8 @@ INSERT INTO accommodation_has_amenity (accommodation_id, amenity_id) VALUE (1, 4
 INSERT INTO accommodation (host_id, `name`, description, charge_per_night, cleaning_charge, check_in, check_out)
 VALUES (3, '백악관', '새하얀 페인트가 수놓인 공간', 100000, 10000, '16:00:00', '12:00:00');
 
-INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address)
-    VALUE (2, 1, 1, '강남구');
+INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address, latitude, longitude)
+    VALUE (2, 1, 1, '강남구', 37.496181, 127.030825);
 
 INSERT INTO accommodation_condition (accommodation_id, guests, bedroom_count, bed_count, bathroom_count)
     VALUE (2, 4, 2, 2, 2);
@@ -56,8 +56,8 @@ INSERT INTO accommodation_has_amenity (accommodation_id, amenity_id) VALUE (2, 4
 INSERT INTO accommodation (host_id, `name`, description, charge_per_night, cleaning_charge, check_in, check_out)
 VALUES (2, '경복궁', '조선 왕실에서의 하루', 150000, 15000, '16:00:00', '12:00:00');
 
-INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address)
-    VALUE (3, 1, 1, '중구');
+INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address, latitude, longitude)
+    VALUE (3, 1, 1, '중구', 37.495320, 127.029590);
 
 INSERT INTO accommodation_condition (accommodation_id, guests, bedroom_count, bed_count, bathroom_count)
     VALUE (3, 2, 3, 3, 3);

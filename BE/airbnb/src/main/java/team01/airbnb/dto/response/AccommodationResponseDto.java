@@ -18,6 +18,7 @@ public class AccommodationResponseDto {
     private Long id;
     private String name;
     private String photo;
+    private AccommodationAddressResponseDto address;
     private AccommodationCondition condition;
     private String amenities;
     private Charge chargePerNight;
