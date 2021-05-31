@@ -244,6 +244,7 @@ public class AccommodationRepository {
     public List<AccommodationResponseDto> findAccommodationsByAddress(String address) {
         String query = "SELECT DISTINCT a.id, a.`name`, a.charge_per_night, p.`name` photo, c.guests" +
                 ", c.bedroom_count, c.bed_count, c.bathroom_count, " +
+                "(SELECT `name` FROM cities WHERE id = ad.city_id) city , ad.address, ad.latitude, ad.longitude, " +
                 "(" +
                 "   SELECT GROUP_CONCAT(m.`name`) " +
                 "   FROM amenity m " +
