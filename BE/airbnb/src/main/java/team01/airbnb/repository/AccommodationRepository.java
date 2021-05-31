@@ -18,6 +18,7 @@ import team01.airbnb.domain.accommodation.AccommodationPhoto;
 import team01.airbnb.dto.Charge;
 import team01.airbnb.dto.response.AccommodationAddressResponseDto;
 import team01.airbnb.dto.response.AccommodationResponseDto;
+import team01.airbnb.dto.response.AccommodationResultListResponseDto;
 import team01.airbnb.dto.response.ChargesResponseDto;
 
 import java.sql.*;
@@ -202,7 +203,7 @@ public class AccommodationRepository {
         return result.length == amenityIds.size();
     }
 
-    public List<AccommodationResponseDto> findAvailableAccommodationsForReservation(
+    public AccommodationResultListResponseDto findAvailableAccommodationsForReservation(
             LocalDate checkIn, LocalDate checkOut, int minCharge, int maxCharge, int guests) {
         String query = "SELECT DISTINCT a.id, a.`name`, a.charge_per_night, p.`name` photo, " +
                 "(SELECT `name` FROM cities WHERE id = ad.city_id) city , ad.address, ad.latitude, ad.longitude, " +
@@ -235,13 +236,14 @@ public class AccommodationRepository {
                 .addValue("min_charge", minCharge)
                 .addValue("max_charge", maxCharge)
                 .addValue("guests", guests);
-        return namedParameterJdbcTemplate.query(
+        List<AccommodationResponseDto> accommodations = namedParameterJdbcTemplate.query(
                 query,
                 namedParameters,
                 ACCOMMODATION_RESPONSE_DTO_ROW_MAPPER);
+        return AccommodationResultListResponseDto.of(accommodations);
     }
 
-    public List<AccommodationResponseDto> findAccommodationsByAddress(String address) {
+    public AccommodationResultListResponseDto findAccommodationsByAddress(String address) {
         String query = "SELECT DISTINCT a.id, a.`name`, a.charge_per_night, p.`name` photo, c.guests" +
                 ", c.bedroom_count, c.bed_count, c.bathroom_count, " +
                 "(SELECT `name` FROM cities WHERE id = ad.city_id) city , ad.address, ad.latitude, ad.longitude, " +
@@ -261,9 +263,10 @@ public class AccommodationRepository {
                 "on (a.id = p.accommodation_id) AND (a.id = c.accommodation_id) AND (a.id = ad.accommodation_id) " +
                 "WHERE ad.address LIKE :address";
         SqlParameterSource namedParameters = new MapSqlParameterSource("address", "%" + address + "%");
-        return namedParameterJdbcTemplate.query(query
+        List<AccommodationResponseDto> accommodations = namedParameterJdbcTemplate.query(query
                 , namedParameters
                 , ACCOMMODATION_RESPONSE_DTO_ROW_MAPPER);
+        return AccommodationResultListResponseDto.of(accommodations);
     }
 
     public ChargesResponseDto findChargesPerNightByAddressAndPeriod(
