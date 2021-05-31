@@ -7,6 +7,7 @@ import team01.airbnb.domain.accommodation.Accommodation;
 import team01.airbnb.dto.ApiResult;
 import team01.airbnb.dto.request.TotalAccommodationSaveRequestDto;
 import team01.airbnb.dto.response.AccommodationResponseDto;
+import team01.airbnb.dto.response.ChargesResponseDto;
 import team01.airbnb.service.AccommodationService;
 
 import java.time.LocalDate;
@@ -51,7 +52,15 @@ public class AccommodationController {
 
     @GetMapping("/search")
     public ApiResult<List<AccommodationResponseDto>> accommodationsByAddress(@RequestParam String address) {
-        List<AccommodationResponseDto> accommodations = accommodationService.findAccommodationsByAddress(address);
-        return ApiResult.succeed(accommodations);
+        return ApiResult.succeed(accommodationService.findAccommodationsByAddress(address));
+    }
+
+    @GetMapping("/charges")
+    public ApiResult<ChargesResponseDto> accommodationsForReservation(
+            @RequestParam String address,
+            @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam("check_in") LocalDate checkIn
+            , @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam("check_out") LocalDate checkOut) {
+        return ApiResult.succeed(accommodationService.findChargesPerNightByAddressAndPeriod(
+                address, checkIn, checkOut));
     }
 }

@@ -8,6 +8,7 @@ import team01.airbnb.domain.accommodation.AccommodationCondition;
 import team01.airbnb.domain.accommodation.AccommodationPhoto;
 import team01.airbnb.dto.request.TotalAccommodationSaveRequestDto;
 import team01.airbnb.dto.response.AccommodationResponseDto;
+import team01.airbnb.dto.response.ChargesResponseDto;
 import team01.airbnb.repository.AccommodationRepository;
 
 import java.time.LocalDate;
@@ -34,6 +35,12 @@ public class AccommodationService {
 
     public List<AccommodationResponseDto> findAccommodationsByAddress(String address) {
         return accommodationRepository.findAccommodationsByAddress(address);
+    }
+
+    public ChargesResponseDto findChargesPerNightByAddressAndPeriod(
+            String address, LocalDate checkIn, LocalDate checkOut) {
+        return accommodationRepository.findChargesPerNightByAddressAndPeriod(
+                address, checkIn, checkOut);
     }
 
     @Transactional

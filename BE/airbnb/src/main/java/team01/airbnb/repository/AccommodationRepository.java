@@ -17,6 +17,7 @@ import team01.airbnb.domain.accommodation.AccommodationCondition;
 import team01.airbnb.domain.accommodation.AccommodationPhoto;
 import team01.airbnb.dto.Charge;
 import team01.airbnb.dto.response.AccommodationResponseDto;
+import team01.airbnb.dto.response.ChargesResponseDto;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -191,7 +192,7 @@ public class AccommodationRepository {
                         return amenityIds.size();
                     }
                 });
-         return result.length == amenityIds.size();
+        return result.length == amenityIds.size();
     }
 
     public List<AccommodationResponseDto> findAvailableAccommodationsForReservation(
@@ -232,7 +233,6 @@ public class AccommodationRepository {
     }
 
     public List<AccommodationResponseDto> findAccommodationsByAddress(String address) {
-        System.out.println("@@@@@ address = " + address);
         String query = "SELECT DISTINCT a.id, a.`name`, a.charge_per_night, p.`name` photo, c.guests" +
                 ", c.bedroom_count, c.bed_count, c.bathroom_count, " +
                 "(" +
@@ -254,6 +254,31 @@ public class AccommodationRepository {
         return namedParameterJdbcTemplate.query(query
                 , namedParameters
                 , ACCOMMODATION_RESPONSE_DTO_ROW_MAPPER);
+    }
+
+    public ChargesResponseDto findChargesPerNightByAddressAndPeriod(
+            String address, LocalDate checkIn, LocalDate checkOut) {
+        String query = "SELECT a.charge_per_night " +
+                "FROM accommodation a " +
+                "JOIN accommodation_address ad " +
+                "on (a.id = ad.accommodation_id) " +
+                "WHERE a.id NOT IN (" +
+                "   SELECT r.accommodation_id " +
+                "   FROM reservation r " +
+                "   WHERE (r.check_in <= :check_in AND r.check_out > :check_in) " +
+                "       OR (r.check_in < :check_out AND r.check_out >= :check_out) " +
+                "       OR (:check_in <= r.check_in AND :check_out > r.check_in) " +
+                ") AND ad.address LIKE :address";
+        SqlParameterSource namedParameters = new MapSqlParameterSource()
+                .addValue("address", "%" + address + "%")
+                .addValue("check_in", checkIn)
+                .addValue("check_out", checkOut);
+        List<Integer> charges = namedParameterJdbcTemplate.query(
+                query
+                , namedParameters
+                , (rs, rowNum) -> rs.getInt("charge_per_night")
+        );
+        return ChargesResponseDto.from(charges);
     }
 
     public List<Accommodation> findAllAccommodations() {
