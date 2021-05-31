@@ -231,6 +231,31 @@ public class AccommodationRepository {
                 ACCOMMODATION_RESPONSE_DTO_ROW_MAPPER);
     }
 
+    public List<AccommodationResponseDto> findAccommodationsByAddress(String address) {
+        System.out.println("@@@@@ address = " + address);
+        String query = "SELECT DISTINCT a.id, a.`name`, a.charge_per_night, p.`name` photo, c.guests" +
+                ", c.bedroom_count, c.bed_count, c.bathroom_count, " +
+                "(" +
+                "   SELECT GROUP_CONCAT(m.`name`) " +
+                "   FROM amenity m " +
+                "   WHERE m.id IN (" +
+                "       SELECT h.amenity_id " +
+                "       FROM accommodation_has_amenity h " +
+                "       WHERE h.accommodation_id = a.id " +
+                "   )" +
+                ") amenities " +
+                "FROM accommodation a " +
+                "JOIN accommodation_photo p " +
+                "JOIN accommodation_condition c " +
+                "JOIN accommodation_address ad " +
+                "on (a.id = p.accommodation_id) AND (a.id = c.accommodation_id) AND (a.id = ad.accommodation_id) " +
+                "WHERE ad.address LIKE :address";
+        SqlParameterSource namedParameters = new MapSqlParameterSource("address", "%" + address + "%");
+        return namedParameterJdbcTemplate.query(query
+                , namedParameters
+                , ACCOMMODATION_RESPONSE_DTO_ROW_MAPPER);
+    }
+
     public List<Accommodation> findAllAccommodations() {
         String query = "SELECT id, host_id, `name`, description, charge_per_night" +
                 ", cleaning_charge, check_in, check_out FROM accommodation";

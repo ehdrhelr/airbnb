@@ -32,6 +32,10 @@ public class AccommodationService {
                 checkIn, checkOut, minCharge, maxCharge, guests);
     }
 
+    public List<AccommodationResponseDto> findAccommodationsByAddress(String address) {
+        return accommodationRepository.findAccommodationsByAddress(address);
+    }
+
     @Transactional
     public void save(TotalAccommodationSaveRequestDto totalAccommodationSaveRequestDto) {
         // request dto에서 Accommodation 숙소도메인을 얻고 숙소를 등록한다. 반환된 id값을 request dto에 저장한다.

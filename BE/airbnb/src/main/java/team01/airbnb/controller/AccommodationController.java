@@ -31,7 +31,7 @@ public class AccommodationController {
 
     // todo : list 감쌀 것
     @GetMapping
-    public ApiResult<List<AccommodationResponseDto>> accommodationsBySearch(
+    public ApiResult<List<AccommodationResponseDto>> accommodationsForReservation(
             @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam("check_in") LocalDate checkIn
             , @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam("check_out") LocalDate checkOut
             , @RequestParam("min_charge") int minCharge
@@ -41,12 +41,17 @@ public class AccommodationController {
                 checkIn, checkOut, minCharge, maxCharge, guests));
     }
 
-
     @PostMapping("/")
     public ApiResult createAccommodation(TotalAccommodationSaveRequestDto totalAccommodationSaveRequestDto) {
         System.out.println(totalAccommodationSaveRequestDto.toString());
         System.out.println(totalAccommodationSaveRequestDto.getConditionSaveRequestDto().toString());
         accommodationService.save(totalAccommodationSaveRequestDto);
         return ApiResult.ok();
+    }
+
+    @GetMapping("/search")
+    public ApiResult<List<AccommodationResponseDto>> accommodationsByAddress(@RequestParam String address) {
+        List<AccommodationResponseDto> accommodations = accommodationService.findAccommodationsByAddress(address);
+        return ApiResult.succeed(accommodations);
     }
 }
