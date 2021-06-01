@@ -3,7 +3,6 @@ package team01.airbnb.dto.response;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 import team01.airbnb.dto.Charge;
 
 import java.util.List;

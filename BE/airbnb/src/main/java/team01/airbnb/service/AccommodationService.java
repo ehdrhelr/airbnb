@@ -6,10 +6,11 @@ import team01.airbnb.domain.accommodation.Accommodation;
 import team01.airbnb.domain.accommodation.AccommodationAddress;
 import team01.airbnb.domain.accommodation.AccommodationCondition;
 import team01.airbnb.domain.accommodation.AccommodationPhoto;
+import team01.airbnb.dto.Charge;
 import team01.airbnb.dto.request.TotalAccommodationSaveRequestDto;
-import team01.airbnb.dto.response.AccommodationResponseDto;
 import team01.airbnb.dto.response.AccommodationResultListResponseDto;
 import team01.airbnb.dto.response.ChargesResponseDto;
+import team01.airbnb.exception.AccommodationNotFoundException;
 import team01.airbnb.repository.AccommodationRepository;
 
 import java.time.LocalDate;
@@ -38,6 +39,16 @@ public class AccommodationService {
             String address, LocalDate checkIn, LocalDate checkOut) {
         return accommodationRepository.findChargesPerNightByAddressAndPeriod(
                 address, checkIn, checkOut);
+    }
+
+    public Charge findChargePerNightByAccommodationId(Long accommodationId) {
+        return accommodationRepository.findChargePerNightByAccommodationId(accommodationId)
+                .orElseThrow(AccommodationNotFoundException::new);
+    }
+
+    public Charge findCleaningChargeByAccommodationId(Long accommodationId) {
+        return accommodationRepository.findCleaningChargeByAccommodationId(accommodationId)
+                .orElseThrow(AccommodationNotFoundException::new);
     }
 
     @Transactional

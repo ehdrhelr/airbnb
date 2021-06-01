@@ -367,4 +367,23 @@ public class AccommodationRepository {
         return reservations.stream().findFirst();
     }
 
+    public Optional<Charge> findChargePerNightByAccommodationId(Long accommodationId) {
+        String query = "SELECT charge_per_night FROM accommodation WHERE id = :accommodation_id";
+        SqlParameterSource namedParameters = new MapSqlParameterSource("accommodation_id", accommodationId);
+        List<Charge> charges = namedParameterJdbcTemplate.query(
+                query
+                , namedParameters
+                , (rs, rowNum) -> Charge.wons(rs.getInt("charge_per_night")));
+        return charges.stream().findFirst();
+    }
+
+    public Optional<Charge> findCleaningChargeByAccommodationId(Long accommodationId) {
+        String query = "SELECT cleaning_charge FROM accommodation WHERE id = :accommodation_id";
+        SqlParameterSource namedParameters = new MapSqlParameterSource("accommodation_id", accommodationId);
+        List<Charge> charges = namedParameterJdbcTemplate.query(
+                query
+                , namedParameters
+                , (rs, rowNum) -> Charge.wons(rs.getInt("cleaning_charge")));
+        return charges.stream().findFirst();
+    }
 }
