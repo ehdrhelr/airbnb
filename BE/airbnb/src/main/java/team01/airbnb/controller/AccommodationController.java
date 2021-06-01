@@ -27,13 +27,14 @@ public class AccommodationController {
 
     @GetMapping
     public ApiResult<AccommodationResultListResponseDto> accommodationsForReservation(
-            @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam("check_in") LocalDate checkIn
+            @RequestParam("city") String city
+            , @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam("check_in") LocalDate checkIn
             , @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam("check_out") LocalDate checkOut
             , @RequestParam("min_charge") int minCharge
             , @RequestParam("max_charge") int maxCharge
             , @RequestParam("guests") int guests) {
         return ApiResult.succeed(accommodationService.findAvailableAccommodationsForReservation(
-                checkIn, checkOut, minCharge, maxCharge, guests));
+                city, checkIn, checkOut, minCharge, maxCharge, guests));
     }
 
     @PostMapping("/")

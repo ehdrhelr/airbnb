@@ -26,9 +26,9 @@ public class AccommodationService {
     }
 
     public AccommodationResultListResponseDto findAvailableAccommodationsForReservation(
-            LocalDate checkIn, LocalDate checkOut, int minCharge, int maxCharge, int guests) {
+            String city, LocalDate checkIn, LocalDate checkOut, int minCharge, int maxCharge, int guests) {
         return accommodationRepository.findAvailableAccommodationsForReservation(
-                checkIn, checkOut, minCharge, maxCharge, guests);
+                city, checkIn, checkOut, minCharge, maxCharge, guests);
     }
 
     public AccommodationResultListResponseDto findAccommodationsByAddress(String address) {

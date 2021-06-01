@@ -204,7 +204,7 @@ public class AccommodationRepository {
     }
 
     public AccommodationResultListResponseDto findAvailableAccommodationsForReservation(
-            LocalDate checkIn, LocalDate checkOut, int minCharge, int maxCharge, int guests) {
+            String city, LocalDate checkIn, LocalDate checkOut, int minCharge, int maxCharge, int guests) {
         String query = "SELECT DISTINCT a.id, a.`name`, a.charge_per_night, p.`name` photo, " +
                 "(SELECT `name` FROM cities WHERE id = ad.city_id) city , ad.address, ad.latitude, ad.longitude, " +
                 "c.guests, c.bedroom_count, c.bed_count, c.bathroom_count, " +
@@ -221,6 +221,7 @@ public class AccommodationRepository {
                 "JOIN accommodation_photo p " +
                 "JOIN accommodation_condition c " +
                 "JOIN accommodation_address ad " +
+                "JOIN cities ci " +
                 "on (a.id = p.accommodation_id) AND (a.id = c.accommodation_id) AND (a.id = ad.accommodation_id) " +
                 "WHERE a.id NOT IN (" +
                 "   SELECT r.accommodation_id " +
@@ -229,13 +230,15 @@ public class AccommodationRepository {
                 "       OR (r.check_in < :check_out AND r.check_out >= :check_out) " +
                 "       OR (:check_in <= r.check_in AND :check_out > r.check_in) " +
                 "   ) AND (:min_charge <= a.charge_per_night AND a.charge_per_night <= :max_charge) " +
-                "   AND a.id IN (SELECT c.accommodation_id FROM accommodation_condition c WHERE c.guests >= :guests)";
+                "   AND a.id IN (SELECT c.accommodation_id FROM accommodation_condition c WHERE c.guests >= :guests) " +
+                "AND ci.`name` = :city";
         SqlParameterSource namedParameters = new MapSqlParameterSource()
                 .addValue("check_in", checkIn)
                 .addValue("check_out", checkOut)
                 .addValue("min_charge", minCharge)
                 .addValue("max_charge", maxCharge)
-                .addValue("guests", guests);
+                .addValue("guests", guests)
+                .addValue("city", city);
         List<AccommodationResponseDto> accommodations = namedParameterJdbcTemplate.query(
                 query,
                 namedParameters,
