@@ -36,9 +36,9 @@ public class AccommodationService {
     }
 
     public ChargesResponseDto findChargesPerNightByAddressAndPeriod(
-            String address, LocalDate checkIn, LocalDate checkOut) {
+            String city, LocalDate checkIn, LocalDate checkOut) {
         return accommodationRepository.findChargesPerNightByAddressAndPeriod(
-                address, checkIn, checkOut);
+                city, checkIn, checkOut);
     }
 
     public Charge findChargePerNightByAccommodationId(Long accommodationId) {

@@ -3,16 +3,13 @@ package team01.airbnb.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-import team01.airbnb.domain.accommodation.Accommodation;
 import team01.airbnb.dto.ApiResult;
 import team01.airbnb.dto.request.TotalAccommodationSaveRequestDto;
-import team01.airbnb.dto.response.AccommodationResponseDto;
 import team01.airbnb.dto.response.AccommodationResultListResponseDto;
 import team01.airbnb.dto.response.ChargesResponseDto;
 import team01.airbnb.service.AccommodationService;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Slf4j
 @RequestMapping("/accommodations")
@@ -26,7 +23,7 @@ public class AccommodationController {
     }
 
     @GetMapping
-    public ApiResult<AccommodationResultListResponseDto> accommodationsForReservation(
+    public ApiResult<AccommodationResultListResponseDto> charges(
             @RequestParam("city") String city
             , @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam("check_in") LocalDate checkIn
             , @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam("check_out") LocalDate checkOut
@@ -51,11 +48,11 @@ public class AccommodationController {
     }
 
     @GetMapping("/charges")
-    public ApiResult<ChargesResponseDto> accommodationsForReservation(
-            @RequestParam String address,
+    public ApiResult<ChargesResponseDto> charges(
+            @RequestParam String city,
             @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam("check_in") LocalDate checkIn
             , @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam("check_out") LocalDate checkOut) {
         return ApiResult.succeed(accommodationService.findChargesPerNightByAddressAndPeriod(
-                address, checkIn, checkOut));
+                city, checkIn, checkOut));
     }
 }

@@ -273,7 +273,7 @@ public class AccommodationRepository {
     }
 
     public ChargesResponseDto findChargesPerNightByAddressAndPeriod(
-            String address, LocalDate checkIn, LocalDate checkOut) {
+            String city, LocalDate checkIn, LocalDate checkOut) {
         String query = "SELECT a.charge_per_night " +
                 "FROM accommodation a " +
                 "JOIN accommodation_address ad " +
@@ -284,9 +284,9 @@ public class AccommodationRepository {
                 "   WHERE (r.check_in <= :check_in AND r.check_out > :check_in) " +
                 "       OR (r.check_in < :check_out AND r.check_out >= :check_out) " +
                 "       OR (:check_in <= r.check_in AND :check_out > r.check_in) " +
-                ") AND ad.address LIKE :address";
+                ") AND (SELECT `name` FROM cities WHERE id = ad.city_id) = :city";
         SqlParameterSource namedParameters = new MapSqlParameterSource()
-                .addValue("address", "%" + address + "%")
+                .addValue("city", city)
                 .addValue("check_in", checkIn)
                 .addValue("check_out", checkOut);
         List<Integer> charges = namedParameterJdbcTemplate.query(
