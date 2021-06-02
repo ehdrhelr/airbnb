@@ -71,7 +71,7 @@ INSERT INTO accommodation_has_amenity (accommodation_id, amenity_id) VALUE (3, 4
 
 -- id : 4
 INSERT INTO accommodation (host_id, `name`, description, charge_per_night, cleaning_charge, check_in, check_out)
-VALUES (2, '숙소4', '숙소4 더미데이터입니다.', 100000, 10000, '16:00:00', '12:00:00');
+VALUES (2, '숙소4', '숙소4 더미데이터입니다.', 70000, 10000, '16:00:00', '12:00:00');
 
 INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address, latitude, longitude)
     VALUE (4, 1, 1, '강남구', 37.490320, 127.029000);
@@ -87,7 +87,7 @@ INSERT INTO accommodation_has_amenity (accommodation_id, amenity_id) VALUE (4, 3
 
 -- id : 5
 INSERT INTO accommodation (host_id, `name`, description, charge_per_night, cleaning_charge, check_in, check_out)
-VALUES (2, '숙소5', '숙소5 더미데이터입니다.', 100000, 10000, '16:00:00', '12:00:00');
+VALUES (2, '숙소5', '숙소5 더미데이터입니다.', 60000, 10000, '16:00:00', '12:00:00');
 
 INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address, latitude, longitude)
     VALUE (5, 1, 1, '강남구', 37.485320, 127.028500);
@@ -103,7 +103,7 @@ INSERT INTO accommodation_has_amenity (accommodation_id, amenity_id) VALUE (5, 3
 
 -- id : 6
 INSERT INTO accommodation (host_id, `name`, description, charge_per_night, cleaning_charge, check_in, check_out)
-VALUES (2, '숙소6', '숙소6 더미데이터입니다.', 100000, 10000, '16:00:00', '12:00:00');
+VALUES (2, '숙소6', '숙소6 더미데이터입니다.', 55000, 10000, '16:00:00', '12:00:00');
 
 INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address, latitude, longitude)
     VALUE (6, 1, 1, '강남구', 37.480320, 127.028000);
@@ -119,7 +119,7 @@ INSERT INTO accommodation_has_amenity (accommodation_id, amenity_id) VALUE (6, 3
 
 -- id : 7
 INSERT INTO accommodation (host_id, `name`, description, charge_per_night, cleaning_charge, check_in, check_out)
-VALUES (2, '숙소7', '숙소7 더미데이터입니다.', 100000, 10000, '16:00:00', '12:00:00');
+VALUES (2, '숙소7', '숙소7 더미데이터입니다.', 30000, 10000, '16:00:00', '12:00:00');
 
 INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address, latitude, longitude)
     VALUE (7, 1, 1, '강남구', 37.475320, 127.027500);
@@ -135,7 +135,7 @@ INSERT INTO accommodation_has_amenity (accommodation_id, amenity_id) VALUE (7, 3
 
 -- id : 8
 INSERT INTO accommodation (host_id, `name`, description, charge_per_night, cleaning_charge, check_in, check_out)
-VALUES (2, '숙소8', '숙소8 더미데이터입니다.', 100000, 10000, '16:00:00', '12:00:00');
+VALUES (2, '숙소8', '숙소8 더미데이터입니다.', 130000, 10000, '16:00:00', '12:00:00');
 
 INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address, latitude, longitude)
     VALUE (8, 1, 1, '강남구', 37.470320, 127.027000);
@@ -151,7 +151,7 @@ INSERT INTO accommodation_has_amenity (accommodation_id, amenity_id) VALUE (8, 3
 
 -- id : 9
 INSERT INTO accommodation (host_id, `name`, description, charge_per_night, cleaning_charge, check_in, check_out)
-VALUES (2, '숙소9', '숙소9 더미데이터입니다.', 100000, 10000, '16:00:00', '12:00:00');
+VALUES (2, '숙소9', '숙소9 더미데이터입니다.', 25000, 10000, '16:00:00', '12:00:00');
 
 INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address, latitude, longitude)
     VALUE (9, 1, 1, '강남구', 37.465000, 127.026500);
@@ -167,7 +167,7 @@ INSERT INTO accommodation_has_amenity (accommodation_id, amenity_id) VALUE (9, 3
 
 -- id : 10
 INSERT INTO accommodation (host_id, `name`, description, charge_per_night, cleaning_charge, check_in, check_out)
-VALUES (2, '숙소10', '숙소10 더미데이터입니다.', 100000, 10000, '16:00:00', '12:00:00');
+VALUES (2, '숙소10', '숙소10 더미데이터입니다.', 110000, 10000, '16:00:00', '12:00:00');
 
 INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address, latitude, longitude)
     VALUE (10, 1, 1, '강남구', 37.460000, 127.026000);
@@ -231,7 +231,7 @@ INSERT INTO accommodation_has_amenity (accommodation_id, amenity_id) VALUE (13, 
 
 -- id : 14
 INSERT INTO accommodation (host_id, `name`, description, charge_per_night, cleaning_charge, check_in, check_out)
-VALUES (2, '숙소14', '숙소14 더미데이터입니다.', 100000, 10000, '16:00:00', '12:00:00');
+VALUES (2, '숙소14', '숙소14 더미데이터입니다.', 150000, 10000, '16:00:00', '12:00:00');
 
 INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address, latitude, longitude)
     VALUE (14, 1, 1, '강남구', 37.470000, 127.025000);
@@ -247,7 +247,7 @@ INSERT INTO accommodation_has_amenity (accommodation_id, amenity_id) VALUE (14, 
 
 -- id : 15
 INSERT INTO accommodation (host_id, `name`, description, charge_per_night, cleaning_charge, check_in, check_out)
-VALUES (2, '숙소15', '숙소15 더미데이터입니다.', 100000, 10000, '16:00:00', '12:00:00');
+VALUES (2, '숙소15', '숙소15 더미데이터입니다.', 150000, 10000, '16:00:00', '12:00:00');
 
 INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address, latitude, longitude)
     VALUE (15, 1, 1, '강남구', 37.465000, 127.025000);
@@ -263,7 +263,7 @@ INSERT INTO accommodation_has_amenity (accommodation_id, amenity_id) VALUE (15, 
 
 -- id : 16
 INSERT INTO accommodation (host_id, `name`, description, charge_per_night, cleaning_charge, check_in, check_out)
-VALUES (2, '숙소16', '숙소16 더미데이터입니다.', 100000, 10000, '16:00:00', '12:00:00');
+VALUES (2, '숙소16', '숙소16 더미데이터입니다.', 50000, 10000, '16:00:00', '12:00:00');
 
 INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address, latitude, longitude)
     VALUE (16, 1, 1, '강남구', 37.460000, 127.025000);
@@ -279,7 +279,7 @@ INSERT INTO accommodation_has_amenity (accommodation_id, amenity_id) VALUE (16, 
 
 -- id : 17
 INSERT INTO accommodation (host_id, `name`, description, charge_per_night, cleaning_charge, check_in, check_out)
-VALUES (2, '숙소17', '숙소17 더미데이터입니다.', 100000, 10000, '16:00:00', '12:00:00');
+VALUES (2, '숙소17', '숙소17 더미데이터입니다.', 300000, 10000, '16:00:00', '12:00:00');
 
 INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address, latitude, longitude)
     VALUE (17, 1, 1, '강남구', 37.455000, 127.025000);
@@ -295,7 +295,7 @@ INSERT INTO accommodation_has_amenity (accommodation_id, amenity_id) VALUE (17, 
 
 -- id : 18
 INSERT INTO accommodation (host_id, `name`, description, charge_per_night, cleaning_charge, check_in, check_out)
-VALUES (2, '숙소18', '숙소18 더미데이터입니다.', 100000, 10000, '16:00:00', '12:00:00');
+VALUES (2, '숙소18', '숙소18 더미데이터입니다.', 70000, 10000, '16:00:00', '12:00:00');
 
 INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address, latitude, longitude)
     VALUE (18, 1, 1, '강남구', 37.450000, 127.025000);
@@ -311,7 +311,7 @@ INSERT INTO accommodation_has_amenity (accommodation_id, amenity_id) VALUE (18, 
 
 -- id : 19
 INSERT INTO accommodation (host_id, `name`, description, charge_per_night, cleaning_charge, check_in, check_out)
-VALUES (2, '숙소19', '숙소19 더미데이터입니다.', 100000, 10000, '16:00:00', '12:00:00');
+VALUES (2, '숙소19', '숙소19 더미데이터입니다.', 55000, 10000, '16:00:00', '12:00:00');
 
 INSERT INTO accommodation_address (accommodation_id, country_id, city_id, address, latitude, longitude)
     VALUE (19, 1, 1, '강남구', 37.445000, 127.025000);
