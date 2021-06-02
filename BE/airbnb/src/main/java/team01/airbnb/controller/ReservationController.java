@@ -1,5 +1,7 @@
 package team01.airbnb.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +13,7 @@ import team01.airbnb.service.ReservationService;
 
 import java.time.LocalDate;
 
+@Api(tags = {"예약관련 API"}, description = "예약화면을 가져오고, 예약할 수 있습니다.")
 @RequestMapping("/reservations")
 @RestController
 public class ReservationController {
@@ -21,6 +24,8 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
+    @ApiOperation(value = "숙소 예약화면 불러오기"
+            , notes = "숙소id, 체크인과 체크아웃, 인원수를 알려주시면 숙박가격, 수수료 및 세금 , 총합 모두 보내드립니다.")
     @GetMapping
     public ApiResult<ReservationViewResponseDto> reservationView(
             @RequestParam("accommodation_id") Long accommodationId
