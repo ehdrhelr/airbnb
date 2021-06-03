@@ -16,9 +16,13 @@ import team01.airbnb.domain.accommodation.AccommodationAddress;
 import team01.airbnb.domain.accommodation.AccommodationCondition;
 import team01.airbnb.domain.accommodation.AccommodationPhoto;
 import team01.airbnb.dto.Charge;
+import team01.airbnb.dto.response.AccommodationAddressResponseDto;
 import team01.airbnb.dto.response.AccommodationResponseDto;
+import team01.airbnb.dto.response.AccommodationResultListResponseDto;
+import team01.airbnb.dto.response.ChargesResponseDto;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,6 +36,12 @@ public class AccommodationRepository {
                             .name(rs.getString("name"))
                             .chargePerNight(Charge.wons(rs.getInt("charge_per_night")))
                             .photo(rs.getString("photo"))
+                            .address(AccommodationAddressResponseDto.builder()
+                                    .city(rs.getString("city"))
+                                    .address(rs.getString("address"))
+                                    .latitude(rs.getDouble("latitude"))
+                                    .longitude(rs.getDouble("longitude"))
+                                    .build())
                             .condition(AccommodationCondition.builder()
                                     .guests(rs.getInt("guests"))
                                     .bedroomCount(rs.getInt("bedroom_count"))
@@ -190,12 +200,14 @@ public class AccommodationRepository {
                         return amenityIds.size();
                     }
                 });
-         return result.length == amenityIds.size();
+        return result.length == amenityIds.size();
     }
 
-    public List<AccommodationResponseDto> findAvailableAccommodationsForReservation() {
-        String query = "SELECT DISTINCT a.id, a.`name`, a.charge_per_night, p.`name` photo, c.guests" +
-                ", c.bedroom_count, c.bed_count, c.bathroom_count, " +
+    public AccommodationResultListResponseDto findAvailableAccommodationsForReservation(
+            String city, LocalDate checkIn, LocalDate checkOut, int minCharge, int maxCharge, int guests) {
+        String query = "SELECT DISTINCT a.id, a.`name`, a.charge_per_night, p.`name` photo, " +
+                "(SELECT `name` FROM cities WHERE id = ad.city_id) city , ad.address, ad.latitude, ad.longitude, " +
+                "c.guests, c.bedroom_count, c.bed_count, c.bathroom_count, " +
                 "(" +
                 "   SELECT GROUP_CONCAT(m.`name`) " +
                 "   FROM amenity m " +
@@ -208,10 +220,81 @@ public class AccommodationRepository {
                 "FROM accommodation a " +
                 "JOIN accommodation_photo p " +
                 "JOIN accommodation_condition c " +
-                "on (a.id = p.accommodation_id) AND (a.id = c.accommodation_id)";
-        return namedParameterJdbcTemplate.query(
+                "JOIN accommodation_address ad " +
+                "JOIN cities ci " +
+                "on (a.id = p.accommodation_id) AND (a.id = c.accommodation_id) AND (a.id = ad.accommodation_id) " +
+                "WHERE a.id NOT IN (" +
+                "   SELECT r.accommodation_id " +
+                "   FROM reservation r" +
+                "   WHERE (r.check_in <= :check_in AND r.check_out > :check_in) " +
+                "       OR (r.check_in < :check_out AND r.check_out >= :check_out) " +
+                "       OR (:check_in <= r.check_in AND :check_out > r.check_in) " +
+                "   ) AND (:min_charge <= a.charge_per_night AND a.charge_per_night <= :max_charge) " +
+                "   AND a.id IN (SELECT c.accommodation_id FROM accommodation_condition c WHERE c.guests >= :guests) " +
+                "AND ci.`name` = :city";
+        SqlParameterSource namedParameters = new MapSqlParameterSource()
+                .addValue("check_in", checkIn)
+                .addValue("check_out", checkOut)
+                .addValue("min_charge", minCharge)
+                .addValue("max_charge", maxCharge)
+                .addValue("guests", guests)
+                .addValue("city", city);
+        List<AccommodationResponseDto> accommodations = namedParameterJdbcTemplate.query(
                 query,
+                namedParameters,
                 ACCOMMODATION_RESPONSE_DTO_ROW_MAPPER);
+        return AccommodationResultListResponseDto.of(accommodations);
+    }
+
+    public AccommodationResultListResponseDto findAccommodationsByAddress(String address) {
+        String query = "SELECT DISTINCT a.id, a.`name`, a.charge_per_night, p.`name` photo, c.guests" +
+                ", c.bedroom_count, c.bed_count, c.bathroom_count, " +
+                "(SELECT `name` FROM cities WHERE id = ad.city_id) city , ad.address, ad.latitude, ad.longitude, " +
+                "(" +
+                "   SELECT GROUP_CONCAT(m.`name`) " +
+                "   FROM amenity m " +
+                "   WHERE m.id IN (" +
+                "       SELECT h.amenity_id " +
+                "       FROM accommodation_has_amenity h " +
+                "       WHERE h.accommodation_id = a.id " +
+                "   )" +
+                ") amenities " +
+                "FROM accommodation a " +
+                "JOIN accommodation_photo p " +
+                "JOIN accommodation_condition c " +
+                "JOIN accommodation_address ad " +
+                "on (a.id = p.accommodation_id) AND (a.id = c.accommodation_id) AND (a.id = ad.accommodation_id) " +
+                "WHERE ad.address LIKE :address";
+        SqlParameterSource namedParameters = new MapSqlParameterSource("address", "%" + address + "%");
+        List<AccommodationResponseDto> accommodations = namedParameterJdbcTemplate.query(query
+                , namedParameters
+                , ACCOMMODATION_RESPONSE_DTO_ROW_MAPPER);
+        return AccommodationResultListResponseDto.of(accommodations);
+    }
+
+    public ChargesResponseDto findChargesPerNightByAddressAndPeriod(
+            String city, LocalDate checkIn, LocalDate checkOut) {
+        String query = "SELECT a.charge_per_night " +
+                "FROM accommodation a " +
+                "JOIN accommodation_address ad " +
+                "on (a.id = ad.accommodation_id) " +
+                "WHERE a.id NOT IN (" +
+                "   SELECT r.accommodation_id " +
+                "   FROM reservation r " +
+                "   WHERE (r.check_in <= :check_in AND r.check_out > :check_in) " +
+                "       OR (r.check_in < :check_out AND r.check_out >= :check_out) " +
+                "       OR (:check_in <= r.check_in AND :check_out > r.check_in) " +
+                ") AND (SELECT `name` FROM cities WHERE id = ad.city_id) = :city";
+        SqlParameterSource namedParameters = new MapSqlParameterSource()
+                .addValue("city", city)
+                .addValue("check_in", checkIn)
+                .addValue("check_out", checkOut);
+        List<Integer> charges = namedParameterJdbcTemplate.query(
+                query
+                , namedParameters
+                , (rs, rowNum) -> rs.getInt("charge_per_night")
+        );
+        return ChargesResponseDto.from(charges);
     }
 
     public List<Accommodation> findAllAccommodations() {
@@ -287,4 +370,23 @@ public class AccommodationRepository {
         return reservations.stream().findFirst();
     }
 
+    public Optional<Charge> findChargePerNightByAccommodationId(Long accommodationId) {
+        String query = "SELECT charge_per_night FROM accommodation WHERE id = :accommodation_id";
+        SqlParameterSource namedParameters = new MapSqlParameterSource("accommodation_id", accommodationId);
+        List<Charge> charges = namedParameterJdbcTemplate.query(
+                query
+                , namedParameters
+                , (rs, rowNum) -> Charge.wons(rs.getInt("charge_per_night")));
+        return charges.stream().findFirst();
+    }
+
+    public Optional<Charge> findCleaningChargeByAccommodationId(Long accommodationId) {
+        String query = "SELECT cleaning_charge FROM accommodation WHERE id = :accommodation_id";
+        SqlParameterSource namedParameters = new MapSqlParameterSource("accommodation_id", accommodationId);
+        List<Charge> charges = namedParameterJdbcTemplate.query(
+                query
+                , namedParameters
+                , (rs, rowNum) -> Charge.wons(rs.getInt("cleaning_charge")));
+        return charges.stream().findFirst();
+    }
 }

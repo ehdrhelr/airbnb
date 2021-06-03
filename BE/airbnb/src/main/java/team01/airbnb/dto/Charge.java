@@ -7,11 +7,19 @@ public class Charge {
         return new Charge(charge);
     }
 
-    Charge(int charge) {
+    public Charge(int charge) {
         this.charge = charge;
     }
 
     public int getCharge() {
         return this.charge;
+    }
+
+    public Charge plus(Charge charge) {
+        return Charge.wons(this.charge + charge.getCharge());
+    }
+
+    public Charge times(double percents) {
+        return wons((int) (this.charge * percents));
     }
 }

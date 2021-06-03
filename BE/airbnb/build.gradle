@@ -28,6 +28,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	compile 'pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.2'
 	testCompile("org.assertj:assertj-core:3.12.2")
+
+	implementation 'io.springfox:springfox-swagger2:2.9.2'
+	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
 }
 
 test {
